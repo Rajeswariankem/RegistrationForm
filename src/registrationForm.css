@@ -29,7 +29,7 @@ body {
 .field-radio {
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .terms {
@@ -108,5 +108,89 @@ body {
   color: red;
   font-size: 16px;
   margin-top: 0px;
-  margin-bottom: 5px;
+  margin-bottom: 13px;
+}
+
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: white;
+  min-width: 260px;
+  padding: 14px 16px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+  animation: slideIn 0.5s ease;
+  overflow: hidden;
+  z-index: 999;
+}
+
+/* Success */
+.toast.success {
+  color: #1e7f43;
+}
+
+/* Error */
+.toast.error {
+  color: red;
+}
+
+/* Text */
+.toast p {
+  margin: 0;
+}
+
+/* Animated Line */
+.toast-line {
+  height: 4px;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  animation: shrink 3s linear forwards;
+}
+
+/* Success Line Color */
+.toast.success .toast-line {
+  background: #1e7f43;
+}
+
+/* Error Line Color */
+.toast.error .toast-line {
+  background: red;
+}
+
+/* When hiding */
+.toast.hide {
+  animation: slideOut 0.4s ease forwards;
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(120%);
+  }
+}
+
+/* Slide from right */
+@keyframes slideIn {
+  from {
+    transform: translateX(120%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Line animation */
+@keyframes shrink {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
 }

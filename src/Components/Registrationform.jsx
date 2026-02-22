@@ -11,6 +11,10 @@ function Registrationform() {
     terms: false,
   });
   const [errors, setErrors] = useState({});
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
+  const [showToast, setShowToast] = useState(false);
+  const [hideToast, setHideToast] = useState(false);
 
   const validateForm = () => {
     let newErrors = {};
@@ -46,13 +50,33 @@ function Registrationform() {
       ...formData,
       [name]: type === "checkbox" ? checked : value,
     });
+    setErrors((prevErrors) => {
+      const newErrors = { ...prevErrors };
+      delete newErrors[name];
+      return newErrors;
+    });
+  };
+
+  const showNotification = (msg, type) => {
+    setMessage(msg);
+    setMessageType(type);
+
+    setHideToast(false);
+    setShowToast(true);
+
+    setTimeout(() => {
+      setHideToast(true);
+    }, 2500);
+
+    setTimeout(() => {
+      setShowToast(false);
+    }, 3000);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log(formData);
-      alert("Form submitted succesfully");
+      showNotification("Form submitted successfully!", "success");
       setFormData({
         name: "",
         email: "",
@@ -64,6 +88,8 @@ function Registrationform() {
       });
 
       setErrors({});
+    } else {
+      showNotification("Please fill all required fields!", "error");
     }
   };
 
@@ -71,6 +97,12 @@ function Registrationform() {
     <div className="container">
       <form className="form-box" onSubmit={handleSubmit}>
         <h1 className="title">Registration Form</h1>
+        {showToast && (
+          <div className={`toast ${messageType} ${hideToast ? "hide" : ""}`}>
+            <p>{message}</p>
+            <div className="toast-line"></div>
+          </div>
+        )}
         <div className="box">
           <div className="field">
             <label htmlFor="name">Full name </label>
@@ -87,103 +119,128 @@ function Registrationform() {
           </div>
         </div>
 
-        <div className="field">
-          <label htmlFor="email">Email </label>
-          <input
-            type="email"
-            name="email"
-            placeholder="Enter Email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-          {errors.email && <p style={{ color: "red" }}>{errors.email}</p>}
-        </div>
-
-        <div className="field">
-          <label htmlFor="password">Password </label>
-          <input
-            type="password"
-            name="password"
-            placeholder="Enter Password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-          {errors.password && <p style={{ color: "red" }}>{errors.password}</p>}
-        </div>
-
-        <div className="field">
-          <label htmlFor="phone">Phone number </label>
-          <input
-            type="tel"
-            name="phone"
-            placeholder="Enter Phone number"
-            value={formData.phone}
-            onChange={handleChange}
-          />
-          {errors.phone && <p style={{ color: "red" }}>{errors.phone}</p>}
-        </div>
-
-        <div className="field-radio">
-          <label htmlFor="gender">Gender </label>
-          <div className="options">
-            <div className="radioopt">
-              <input
-                type="radio"
-                name="gender"
-                value="Male"
-                checked={formData.gender}
-                onChange={handleChange}
-              />
-              <span>Male</span>
-            </div>
-
-            <div className="radioopt">
-              <input
-                type="radio"
-                name="gender"
-                value="Female"
-                checked={formData.gender}
-                onChange={handleChange}
-              />
-              <span>Female</span>
-            </div>
-          </div>
-          {errors.gender && <p style={{ color: "red" }}>{errors.gender}</p>}
-        </div>
-
-        <div className="field">
-          <label htmlFor="course">Course </label>
-          <select
-            name="course"
-            id="couse"
-            value={formData.course}
-            onChange={handleChange}
-          >
-            <option value="" disabled>
-              Select course
-            </option>
-            <option value="CSE">CSE</option>
-            <option value="AIML">AIML</option>
-            <option value="Cyber Security">Cyber Security</option>
-            <option value="Data Science">Data Science</option>
-            <option value="ECE">ECE</option>
-            <option value="EEE">EEE</option>
-            <option value="Mechanical">Mechanical</option>
-            <option value="Civil">Civil</option>
-          </select>
-          {errors.course && <p style={{ color: "red" }}>{errors.course}</p>}
-        </div>
-        <div className="terms">
-          <label>
+        <div className="box">
+          <div className="field">
+            <label htmlFor="email">Email </label>
             <input
-              type="checkbox"
-              name="terms"
-              checked={formData.terms}
+              type="email"
+              name="email"
+              placeholder="Enter Email"
+              value={formData.email}
               onChange={handleChange}
             />
-            I agree to the terms
-          </label>
-          {errors.terms && <p style={{ color: "red" }}>{errors.terms}</p>}
+          </div>
+          <div className="error-box">
+            {errors.email && <p className="error">* {errors.email}</p>}
+          </div>
+        </div>
+
+        <div className="box">
+          <div className="field">
+            <label htmlFor="password">Password </label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Enter Password"
+              value={formData.password}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="error">
+            {errors.password && <p className="error">* {errors.password}</p>}
+          </div>
+        </div>
+
+        <div className="box">
+          <div className="field">
+            <label htmlFor="phone">Phone number </label>
+            <input
+              type="tel"
+              name="phone"
+              placeholder="Enter Phone number"
+              value={formData.phone}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="error">
+            {errors.phone && <p className="error">* {errors.phone}</p>}
+          </div>
+        </div>
+
+        <div className="box">
+          <div className="field-radio">
+            <label htmlFor="gender">Gender </label>
+            <div className="options">
+              <div className="radioopt">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="Male"
+                  checked={formData.gender === "Male"}
+                  onChange={handleChange}
+                />
+                <span>Male</span>
+              </div>
+
+              <div className="radioopt">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="Female"
+                  checked={formData.gender === "Female"}
+                  onChange={handleChange}
+                />
+                <span>Female</span>
+              </div>
+            </div>
+          </div>
+          <div className="error">
+            {errors.gender && <p className="error">* {errors.gender}</p>}
+          </div>
+        </div>
+
+        <div className="box">
+          <div className="field">
+            <label htmlFor="course">Course </label>
+            <select
+              name="course"
+              id="couse"
+              value={formData.course}
+              onChange={handleChange}
+            >
+              <option value="" disabled>
+                Select course
+              </option>
+              <option value="CSE">CSE</option>
+              <option value="AIML">AIML</option>
+              <option value="Cyber Security">Cyber Security</option>
+              <option value="Data Science">Data Science</option>
+              <option value="ECE">ECE</option>
+              <option value="EEE">EEE</option>
+              <option value="Mechanical">Mechanical</option>
+              <option value="Civil">Civil</option>
+            </select>
+          </div>
+          <div className="error">
+            {errors.course && <p className="error">* {errors.course}</p>}
+          </div>
+        </div>
+
+        <div className="box">
+          <div className="terms">
+            <label>
+              <input
+                type="checkbox"
+                name="terms"
+                checked={formData.terms}
+                onChange={handleChange}
+              />
+              I agree to the terms
+            </label>
+          </div>
+          <div className="error">
+            {errors.terms && <p className="error">* {errors.terms}</p>}
+          </div>
         </div>
 
         <button type="submit" className="btn">
