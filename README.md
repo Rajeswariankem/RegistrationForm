@@ -89,13 +89,13 @@ The toast notification:
 ## 📸 Screenshots
 
 ### 🖥 Registration Form UI
-![Form UI](Images/form.png)
+![Form UI](Images/Form.png)
 
 ### ⚠ Error Toast Notification
-![Error Toast](Images/error.png)
+![Error Toast](Images/Error.png)
 
 ### ❌ Validation Errors
-![Validation Errors](Images/validation.png)
+![Validation Errors](Images/Validation.png)
 
 ### ✅ Success Toast Notification
 ![Success Toast](Images/submitted.png)
